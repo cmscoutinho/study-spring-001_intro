@@ -16,6 +16,12 @@ public class ScreenmatchApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		System.out.println("Hello, Spring!");
 
+		var consumer = new ApiConsumer();
+		var json = consumer.getData("https://www.omdbapi.com/?t=friends&Season=1&apikey=337e4e55");
+		System.out.println(json);
+
+		json = consumer.getData("https://coffee.alexflipnote.dev/random.json");
+		System.out.println(json);
 	}
 
 }
