@@ -6,6 +6,8 @@ import br.com.alura.screenmatch.model.SeriesData;
 import br.com.alura.screenmatch.service.ApiConsumer;
 import br.com.alura.screenmatch.service.DataConverter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -24,11 +26,16 @@ public class Main {
         SeriesData series = converter.getData(json, SeriesData.class);
         System.out.println(series);
 
-        fullUrl = BASE_URL + "?t=" + title.replace(" ", "+") + "&apikey=" + API_KEY;
-        json = consumer.getData(fullUrl);
+//        EpisodeData episode = converter.getData(json, EpisodeData.class);
 
-        SeasonData season = converter.getData(json, SeasonData.class);
-        EpisodeData episode = converter.getData(json, EpisodeData.class);
+        List<SeasonData> seasons = new ArrayList<>();
+
+        for (int i = 1; i < series.seasons(); i++) {
+            json = consumer.getData("https://www.omdbapi.com/?t=" + title + "&season=" + i + "&apikey="+ API_KEY);
+            SeasonData season = converter.getData(json, SeasonData.class);
+            seasons.add(season);
+        }
+        seasons.forEach(System.out::println);
 
     }
 }
