@@ -21,9 +21,12 @@ public class Main {
         var fullUrl = BASE_URL + "?t=" + title.replace(" ", "+") + "&apikey=" + API_KEY;
         var json = consumer.getData(fullUrl);
 
-        System.out.println(json);
-
         SeriesData series = converter.getData(json, SeriesData.class);
+        System.out.println(series);
+
+        fullUrl = BASE_URL + "?t=" + title.replace(" ", "+") + "&apikey=" + API_KEY;
+        json = consumer.getData(fullUrl);
+
         SeasonData season = converter.getData(json, SeasonData.class);
         EpisodeData episode = converter.getData(json, EpisodeData.class);
 
