@@ -1,13 +1,31 @@
 package br.com.alura.screenmatch.model;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
-public class Episodes {
+public class Episode {
     private String title;
     private Integer number;
     private Integer season;
     private Double rating;
     private LocalDate releaseDate;
+
+    public Episode(Integer numberSeason, EpisodeData episodeData) {
+        this.title = episodeData.title();
+        this.number = episodeData.number();
+        this.season = numberSeason;
+        try {
+            this.rating = Double.valueOf(episodeData.rating());
+        } catch (NumberFormatException e) {
+            this.rating = 0.0;
+        }
+
+        try {
+            this.releaseDate = LocalDate.parse(episodeData.releaseDate());
+        } catch (DateTimeParseException e) {
+            this.releaseDate = null;
+        }
+    }
 
     public String getTitle() {
         return title;
