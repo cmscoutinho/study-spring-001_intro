@@ -6,6 +6,9 @@ import br.com.alura.screenmatch.model.SeriesData;
 import br.com.alura.screenmatch.service.ApiConsumer;
 import br.com.alura.screenmatch.service.DataConverter;
 
+import javax.swing.text.DateFormatter;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -60,9 +63,26 @@ public class Main {
 
         List<Episode> episodes = seasons.stream()
                 .flatMap(s -> s.episodes().stream()
-                .map(d -> new Episode(s.number(), d))
+                        .map(d -> new Episode(s.number(), d))
                 ).collect(Collectors.toList());
 
         episodes.forEach(System.out::println);
+
+        System.out.print("From which year do you want to filter?: ");
+        var year = scanner.nextInt();
+        scanner.nextLine();
+
+        LocalDate searchDate = LocalDate.of(year, 1, 1);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        episodes.stream()
+                .filter(e -> e.getReleaseDate() != null && e.getReleaseDate().isAfter(searchDate))
+                .forEach(e -> System.out.println(
+                        "Season: " + e.getSeason() +
+                                " Episode: " + e.getNumber() +
+                                " Release date: " + e.getReleaseDate().format(formatter)
+                ));
+
     }
 }
