@@ -77,17 +77,23 @@ public class Main {
         System.out.print("Which episode are you looking for?: ");
         var episodeSnippet = scanner.nextLine();
 
-        Optional<Episode> searchedEpisode = episodes.stream()
-                .filter(e -> e.getTitle().toUpperCase().contains(episodeSnippet.toUpperCase()))
-                .findFirst();
+//        Optional<Episode> searchedEpisode = episodes.stream()
+//                .filter(e -> e.getTitle().toUpperCase().contains(episodeSnippet.toUpperCase()))
+//                .findFirst();
+//
+//        if (searchedEpisode.isPresent()) {
+//            System.out.println("Episode found!");
+//            Episode ep = searchedEpisode.get();
+//            System.out.println("S" + ep.getSeason() + " E" + ep.getNumber());
+//        } else {
+//            System.out.println("Episode not found!");
+//        }
 
-        if (searchedEpisode.isPresent()) {
-            System.out.println("Episode found!");
-            Episode ep = searchedEpisode.get();
-            System.out.println("S" + ep.getSeason() + " E" + ep.getNumber());
-        } else {
-            System.out.println("Episode not found!");
-        }
+        Map<Integer, Double> ratingPerSeason = episodes.stream()
+                .collect(Collectors.groupingBy(Episode::getSeason,
+                        Collectors.averagingDouble(Episode::getRating)));
+
+        System.out.println(ratingPerSeason);
 
 //        episodes.forEach(System.out::println);
 
