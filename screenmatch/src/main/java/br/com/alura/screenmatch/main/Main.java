@@ -1,6 +1,7 @@
 package br.com.alura.screenmatch.main;
 
 import br.com.alura.screenmatch.model.Episode;
+import br.com.alura.screenmatch.model.EpisodeData;
 import br.com.alura.screenmatch.model.SeasonData;
 import br.com.alura.screenmatch.model.SeriesData;
 import br.com.alura.screenmatch.service.ApiConsumer;
@@ -9,6 +10,7 @@ import br.com.alura.screenmatch.service.DataConverter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -53,37 +55,45 @@ public class Main {
 //                .limit(4)
 //                .forEach(System.out::println);
 
-//        List<EpisodeData> topEpisodes = seasons.stream()
-//                .flatMap(t -> t.episodes().stream())
-//                .filter(e -> !e.rating().equalsIgnoreCase("N/A"))
-//                .sorted(Comparator.comparing(EpisodeData::rating).reversed())
-//                .limit(5)
-//                .collect(Collectors.toList());
+        List<EpisodeData> topEpisodes = seasons.stream()
+                .flatMap(s -> s.episodes().stream())
+                .collect(Collectors.toList());
+
+        System.out.println("\nTop 10 episódios:");
+        topEpisodes.stream()
+                .filter(e -> !e.rating().equalsIgnoreCase("N/A"))
+                .peek(e -> System.out.println("Filtro N/A: " + e))
+                .sorted(Comparator.comparing(EpisodeData::rating).reversed())
+                .peek(e -> System.out.println("Ordenação: " + e))
+                .limit(10)
+                .peek(e -> System.out.println("Limitação em 10: " + e))
+                .map(e -> e.title().toUpperCase())
+                .peek(e -> System.out.println("Map de uppercase: " + e))
+                .forEach(System.out::println);
 //
-//        topEpisodes.forEach(System.out::println);
 
-        List<Episode> episodes = seasons.stream()
-                .flatMap(s -> s.episodes().stream()
-                        .map(d -> new Episode(s.number(), d))
-                ).collect(Collectors.toList());
+//        List<Episode> episodes = seasons.stream()
+//                .flatMap(s -> s.episodes().stream()
+//                        .map(d -> new Episode(s.number(), d))
+//                ).collect(Collectors.toList());
+//
+//        episodes.forEach(System.out::println);
 
-        episodes.forEach(System.out::println);
-
-        System.out.print("From which year do you want to filter?: ");
-        var year = scanner.nextInt();
-        scanner.nextLine();
-
-        LocalDate searchDate = LocalDate.of(year, 1, 1);
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-        episodes.stream()
-                .filter(e -> e.getReleaseDate() != null && e.getReleaseDate().isAfter(searchDate))
-                .forEach(e -> System.out.println(
-                        "Season: " + e.getSeason() +
-                                " Episode: " + e.getNumber() +
-                                " Release date: " + e.getReleaseDate().format(formatter)
-                ));
+//        System.out.print("From which year do you want to filter?: ");
+//        var year = scanner.nextInt();
+//        scanner.nextLine();
+//
+//        LocalDate searchDate = LocalDate.of(year, 1, 1);
+//
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+//
+//        episodes.stream()
+//                .filter(e -> e.getReleaseDate() != null && e.getReleaseDate().isAfter(searchDate))
+//                .forEach(e -> System.out.println(
+//                        "Season: " + e.getSeason() +
+//                                " Episode: " + e.getNumber() +
+//                                " Release date: " + e.getReleaseDate().format(formatter)
+//                ));
 
     }
 }
