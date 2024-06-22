@@ -9,10 +9,7 @@ import br.com.alura.screenmatch.service.DataConverter;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Main {
@@ -41,7 +38,7 @@ public class Main {
             SeasonData season = converter.getData(json, SeasonData.class);
             seasons.add(season);
         }
-//        seasons.forEach(System.out::println);
+        seasons.forEach(System.out::println);
 
 //        seasons.forEach(s -> s.episodes().forEach(e -> System.out.println(e.title())));
 
@@ -55,28 +52,43 @@ public class Main {
 //                .limit(4)
 //                .forEach(System.out::println);
 
-        List<EpisodeData> topEpisodes = seasons.stream()
-                .flatMap(s -> s.episodes().stream())
-                .collect(Collectors.toList());
-
-        System.out.println("\nTop 10 episódios:");
-        topEpisodes.stream()
-                .filter(e -> !e.rating().equalsIgnoreCase("N/A"))
-                .peek(e -> System.out.println("Filtro N/A: " + e))
-                .sorted(Comparator.comparing(EpisodeData::rating).reversed())
-                .peek(e -> System.out.println("Ordenação: " + e))
-                .limit(10)
-                .peek(e -> System.out.println("Limitação em 10: " + e))
-                .map(e -> e.title().toUpperCase())
-                .peek(e -> System.out.println("Map de uppercase: " + e))
-                .forEach(System.out::println);
+//        List<EpisodeData> topEpisodes = seasons.stream()
+//                .flatMap(s -> s.episodes().stream())
+//                .collect(Collectors.toList());
+//
+//        System.out.println("\nTop 10 episódios:");
+//        topEpisodes.stream()
+//                .filter(e -> !e.rating().equalsIgnoreCase("N/A"))
+//                .peek(e -> System.out.println("Filtro N/A: " + e))
+//                .sorted(Comparator.comparing(EpisodeData::rating).reversed())
+//                .peek(e -> System.out.println("Ordenação: " + e))
+//                .limit(10)
+//                .peek(e -> System.out.println("Limitação em 10: " + e))
+//                .map(e -> e.title().toUpperCase())
+//                .peek(e -> System.out.println("Map de uppercase: " + e))
+//                .forEach(System.out::println);
 //
 
-//        List<Episode> episodes = seasons.stream()
-//                .flatMap(s -> s.episodes().stream()
-//                        .map(d -> new Episode(s.number(), d))
-//                ).collect(Collectors.toList());
-//
+        List<Episode> episodes = seasons.stream()
+                .flatMap(s -> s.episodes().stream()
+                        .map(d -> new Episode(s.number(), d))
+                ).collect(Collectors.toList());
+
+        System.out.print("Which episode are you looking for?: ");
+        var episodeSnippet = scanner.nextLine();
+
+        Optional<Episode> searchedEpisode = episodes.stream()
+                .filter(e -> e.getTitle().toUpperCase().contains(episodeSnippet.toUpperCase()))
+                .findFirst();
+
+        if (searchedEpisode.isPresent()) {
+            System.out.println("Episode found!");
+            Episode ep = searchedEpisode.get();
+            System.out.println("S" + ep.getSeason() + " E" + ep.getNumber());
+        } else {
+            System.out.println("Episode not found!");
+        }
+
 //        episodes.forEach(System.out::println);
 
 //        System.out.print("From which year do you want to filter?: ");
