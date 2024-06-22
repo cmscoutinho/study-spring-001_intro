@@ -74,8 +74,8 @@ public class Main {
                         .map(d -> new Episode(s.number(), d))
                 ).collect(Collectors.toList());
 
-        System.out.print("Which episode are you looking for?: ");
-        var episodeSnippet = scanner.nextLine();
+//        System.out.print("Which episode are you looking for?: ");
+//        var episodeSnippet = scanner.nextLine();
 
 //        Optional<Episode> searchedEpisode = episodes.stream()
 //                .filter(e -> e.getTitle().toUpperCase().contains(episodeSnippet.toUpperCase()))
@@ -90,6 +90,7 @@ public class Main {
 //        }
 
         Map<Integer, Double> ratingPerSeason = episodes.stream()
+                .filter(e -> e.getRating() > 0.0)
                 .collect(Collectors.groupingBy(Episode::getSeason,
                         Collectors.averagingDouble(Episode::getRating)));
 
