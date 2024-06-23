@@ -96,6 +96,13 @@ public class Main {
 
         System.out.println(ratingPerSeason);
 
+        Optional<Episode> topRatedEps = episodes.stream()
+                .filter(e -> e.getRating() > 9.5)
+                .peek(System.out::println)
+                .collect(Collectors.toSet()).stream()
+                .findFirst();
+
+        System.out.println(topRatedEps);
 //        episodes.forEach(System.out::println);
 
 //        System.out.print("From which year do you want to filter?: ");
