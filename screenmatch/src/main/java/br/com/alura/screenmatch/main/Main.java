@@ -96,13 +96,21 @@ public class Main {
 
         System.out.println(ratingPerSeason);
 
-        Optional<Episode> topRatedEps = episodes.stream()
-                .filter(e -> e.getRating() > 9.5)
-                .peek(System.out::println)
-                .collect(Collectors.toSet()).stream()
-                .findFirst();
+        DoubleSummaryStatistics est = episodes.stream()
+                .filter(e -> e.getRating() > 0.0)
+                .collect(Collectors.summarizingDouble(Episode::getRating));
+        System.out.println("Média: " + est.getAverage());
+        System.out.println("Melhor episódio: " + est.getMax());
+        System.out.println("Pior episódio: " + est.getMin());
+        System.out.println("Total de episódios: " + est.getCount());
 
-        System.out.println(topRatedEps);
+//        Optional<Episode> topRatedEps = episodes.stream()
+//                .filter(e -> e.getRating() > 9.5)
+//                .peek(System.out::println)
+//                .collect(Collectors.toSet()).stream()
+//                .findFirst();
+//
+//        System.out.println(topRatedEps);
 //        episodes.forEach(System.out::println);
 
 //        System.out.print("From which year do you want to filter?: ");
